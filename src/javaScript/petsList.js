@@ -41,28 +41,33 @@ function renderPetsList(pets) {
 }
 
 function createPetCard(pet) {
-  return `<li class="pet-card" data-id="${pet._id}">
+  return `<li class="petlist-pet-card" data-id="${pet._id}">
       <img
         class="pet-image"
         src="${pet.image || 'images/placeholder.jpg'}"
         alt="${pet.name}"
       >
 
-      <div class="pet-content">
-        <span class="pet-category">${
-          pet.categories?.[0]?.name || 'no category'
-        }</span>
-
-        <h3 class="pet-name">${pet.name}</h3>
-        <p class="pet-breed">${pet.species}</p>
-
-        <p class="pet-meta">
-          ${pet.gender} • ${pet.age}
-        </p>
+      <div class="petlist-pet-content">
+        <div class="petlist-pet-content-about">
+        <p class="petlist-pet-breed">${pet.species}</p>
+            
+    
+            <h3 class="pet-name">${pet.name}</h3>
+            <span class="petlist-pet-category">${
+              pet.categories?.[0]?.name || 'no category'
+            }</span>
+    
+            <p class="pet-meta">
+              ${pet.gender} • ${pet.age}
+            </p>
+        </div>
 
         <p class="pet-description">
           ${pet.shortDescription}
         </p>
+
+        <button class="pet-more-btn js-pet-more-btn" type="button">Дізнатися більше</button>
       </div>
     </li>`;
 }

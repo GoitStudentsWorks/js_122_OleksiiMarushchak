@@ -12,7 +12,7 @@
   align-items: center;
 }
 
-.pet-list-catergorys {
+.pet-list-catergories {
   display: flex;
 }
 
@@ -20,4 +20,43 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+.petlist-pet-card {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 16px;
+  background: #eee9e3;
+}
+
+.petlist-pet-image {
+  border-radius: 8px;
+}
+
+.petlist-pet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.petlist-pet-content-about {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pet-more-btn {
+  border: 1px solid var(--color-neutral-darkest);
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 8px 20px;
+  height: 40px;
+}
+
+.petlist-pet-breed {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.5;
 }
