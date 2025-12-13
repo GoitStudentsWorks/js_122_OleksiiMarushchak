@@ -6,7 +6,6 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 const categoriesList = document.querySelector('.js-pet-list-categories');
 const petsListCards = document.querySelector('.js-pets-list-cards');
-const CategorieFilterBtn = document.querySelectorAll('.category-btn');
 
 let ALLPETS = [];
 
@@ -50,7 +49,7 @@ async function getPetsList() {
 // RENDERS----
 function renderCategories(categories) {
   const allButton = `<li class="pets-list-categories-item">
-      <button class="category-btn" type="button" data-name="all">Всі</button>
+      <button class="category-btn active" type="button" data-name="all">Всі</button>
     </li>`;
   const markup = categories.map(renderCategorie).join('');
   categoriesList.innerHTML = allButton + markup;
@@ -127,22 +126,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 categoriesList.addEventListener('click', e => {
-  if (e.target.classList.contains('category-btn')) {
-    const selectedCategoryName = e.target.dataset.name;
+  const button = e.target.closest('.category-btn');
+  if (!button || !categoriesList.contains(button)) return;
 
-    if (selectedCategoryName === 'all') {
-      renderPetsList(ALLPETS);
-      e.target.classList.add('active');
-      return;
-    }
+  const selectedCategoryName = button.dataset.name;
 
+  if (selectedCategoryName === 'all') {
+    renderPetsList(ALLPETS);
+  } else {
     const filteredPets = ALLPETS.filter(pet =>
       pet.categories?.some(pet => pet && pet.name === selectedCategoryName)
     );
-
     renderPetsList(filteredPets);
-
-    CategorieFilterBtn.forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
   }
+
+  const categoryButtons = categoriesList.querySelectorAll('.category-btn');
+  categoryButtons.forEach(btn => btn.classList.remove('active'));
+  button.classList.add('active');
 });
+
+// petsListCards.addEventListener('click', e => {
+//   const button = e.target.closest('.js-pet-more-btn');
+//   if (!button || !petsListCards.contains(button)) return;
+
+//   button.classList.toggle('active');
+// });

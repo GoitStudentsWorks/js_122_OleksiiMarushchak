@@ -86,13 +86,13 @@
   border: 1px solid transparent;
 }
 
-.category-btn:hover,
-.category-btn:focus,
-.category-btn:active {
-  border: 1px solid var(--opacity-transparent);
-  border-radius: 100px;
+.category-btn:hover {
   background: var(--color-mariner-lighter);
-  transform: none;
+}
+
+.category-btn.active {
+  background: var(--color-mariner-lighter);
+  border: 1px solid var(--opacity-transparent);
 }
 
 .pets-list-cards {
