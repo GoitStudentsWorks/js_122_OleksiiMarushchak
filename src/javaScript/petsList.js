@@ -2,12 +2,15 @@ import axios from 'axios';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+// VARIABLE----
+
+let ALLPETS = [];
+
 // FETCHES----
 
 async function getPetsCategorie() {
   try {
     const res = await axios.get('https://paw-hut.b.goit.study/api/categories');
-    console.log(res.data);
 
     const categories = res.data;
 
@@ -29,9 +32,9 @@ async function getPetsList() {
       },
     });
 
-    const pets = res.data.animals;
+    ALLPETS = res.data.animals;
 
-    renderPetsList(pets);
+    renderPetsList(ALLPETS);
   } catch (err) {
     iziToast.error({
       title: 'Помилка',
@@ -51,16 +54,18 @@ function renderCategories(categories) {
 
 function renderCategorie(category) {
   return `<li>
-        <button class="category-btn" type="button" data-category="${category._id} data-name="${category.name}">
+        <button class="category-btn" type="button" data-category="${category._id}" data-name="${category.name}">
           ${category.name}
         </button>
       </li>`;
 }
 
 function renderPetsList(pets) {
+  petsListCards.innerHTML = '';
+
   if (!pets.length) {
     petsListCards.innerHTML =
-      '<p>Нажаль наразі не має доступних хатніх тваринок</p>';
+      '<p>Нажаль наразі не має доступних хатніх тваринок 😞 </p>';
     return;
   }
 
@@ -103,6 +108,24 @@ function createPetCard(pet) {
 }
 
 // FUNCTIONAL----
+
 document.addEventListener('DOMContentLoaded', () => {
   getPetsList(), getPetsCategorie();
+});
+
+categoriesList.addEventListener('click', e => {
+  if (e.target.classList.contains('category-btn')) {
+    const selectedCategoryName = e.target.dataset.name;
+
+    const filteredPets = ALLPETS.filter(pet =>
+      pet.categories?.some(pet => pet && pet.name === selectedCategoryName)
+    );
+
+    renderPetsList(filteredPets);
+
+    document
+      .querySelectorAll('.category-btn')
+      .forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+  }
 });
