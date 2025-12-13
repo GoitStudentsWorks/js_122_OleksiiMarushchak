@@ -4,6 +4,9 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 // VARIABLE----
 
+const categoriesList = document.querySelector('.js-pet-list-categories');
+const petsListCards = document.querySelector('.js-pets-list-cards');
+
 let ALLPETS = [];
 
 // FETCHES----
@@ -28,7 +31,7 @@ async function getPetsList() {
     const res = await axios.get('https://paw-hut.b.goit.study/api/animals', {
       params: {
         page: 1,
-        limit: 8,
+        limit: 30,
       },
     });
 
@@ -44,9 +47,6 @@ async function getPetsList() {
 }
 
 // RENDERS----
-const categoriesList = document.querySelector('.js-pet-list-categories');
-const petsListCards = document.querySelector('.js-pets-list-cards');
-
 function renderCategories(categories) {
   const markup = categories.map(renderCategorie).join('');
   categoriesList.innerHTML = markup;
@@ -63,14 +63,15 @@ function renderCategorie(category) {
 function renderPetsList(pets) {
   petsListCards.innerHTML = '';
 
-  if (!pets.length) {
+  const petsToRender = pets.slice(0, 8);
+
+  if (!petsToRender.length) {
     petsListCards.innerHTML =
       '<p>Нажаль наразі не має доступних хатніх тваринок 😞 </p>';
     return;
   }
 
-  const markup = pets.map(createPetCard).join('');
-
+  const markup = petsToRender.map(createPetCard).join('');
   petsListCards.insertAdjacentHTML('afterbegin', markup);
 }
 
@@ -88,9 +89,16 @@ function createPetCard(pet) {
             
             <h3 class="petlist-card-tag">${pet.name}</h3>
 
-            <span class="petlist-pet-category">${
-              pet.categories?.[0]?.name || 'No category'
-            }</span>
+            <div class="petlist-pet-categories">
+    ${
+      pet.categories && pet.categories.length
+        ? pet.categories
+            .map(cat => `<span class="petlist-pet-category">${cat.name}</span>`)
+            .join('')
+        : '<span class="petlist-pet-category">No category</span>'
+    }
+  </div>
+            </div>
     
             <ul class="petlist-pet-meta">
               <li class="petlist-pet-meta-item">${pet.gender}</li>

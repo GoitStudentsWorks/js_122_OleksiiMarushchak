@@ -107,6 +107,12 @@
   line-height: 1.5;
 }
 
+.petlist-pet-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 .petlist-pet-category {
   font-weight: 600;
   font-size: 10px;
@@ -115,7 +121,6 @@
   background: var(--opacity-neutral-darkest-5);
   border-radius: 100px;
   padding: 4px 10px;
-  width: 56px;
   height: 23px;
   color: var(--color-neutral-darkest);
   display: flex;
