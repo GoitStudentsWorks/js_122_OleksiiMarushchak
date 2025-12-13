@@ -4,15 +4,17 @@ async function getPetsList() {
   try {
     const res = await axios.get('https://paw-hut.b.goit.study/api/animals');
 
-    if (!Array.isArray(res.data)) {
+    const pets = res.data?.data?.amimals;
+
+    if (!Array.isArray(pets)) {
       throw new Error('Not a JSON');
     }
 
     renderPetsList(res.data);
   } catch (err) {
-    iziToast.err({
+    iziToast.error({
       title: 'Помилка',
-      message: error.res?.data?.message || 'Не можливо завантажити дані',
+      message: err.response?.data?.message || 'Не можливо завантажити дані',
     });
   }
 }
@@ -28,7 +30,7 @@ function renderPetsList(pets) {
 
   const markup = pets.map(createPetCard).join('');
 
-  petsListCards.insertAdjacentElement = markup;
+  petsListCards.insertAdjacentHTML = ('afterbegin', markup);
 }
 
 function createPetCard(pet) {
