@@ -7,4 +7,4 @@ import './javaScript/successStories.js'; /* Importing successStories.js for succ
 import './javaScript/footer.js'; /* Importing footer.js for footer functionality */
 import './javaScript/modal.js'; /* Importing modal.js for any modal */
 import './css/styles.css'; /* Importing main styles */
-
+import './css/partials/hero.css'; /* Importing hero section styles */
