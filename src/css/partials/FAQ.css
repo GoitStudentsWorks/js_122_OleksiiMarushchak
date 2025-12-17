@@ -1,11 +1,13 @@
 .faq {
   max-width: 864px;
-  padding: 64px 0;
+  padding-top: 64px;
+  padding-bottom: 64px;
 }
 
 @media only screen and (min-width: 1440px) {
   .faq {
-    padding: 80px 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
 }
 
@@ -76,8 +78,15 @@
   font-style: normal;
   line-height: 150%;
   letter-spacing: 0%;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
 }
 
 .faq-accordion-content--visible {
-  display: block;
+  /* display: block; */
+  grid-template-rows: 1fr;
+}
+.faq-accordion-content > div {
+  overflow: hidden;
 }
