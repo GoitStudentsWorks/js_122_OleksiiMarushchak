@@ -194,7 +194,8 @@ flex-shrink: 0;
 }
 
 .success-stories-carousel-arrow {
-  stroke: currentColor;
+width: 24px;
+height: 24px;
 }
 
 .success-stories-button:hover, .success-stories-button:focus, .success-stories-button:active {
