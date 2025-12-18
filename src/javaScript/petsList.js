@@ -11,19 +11,16 @@ const petsListCards = document.querySelector('.js-pets-list-cards');
 const showMoreBtn = document.querySelector('.js-showmore-btn');
 const loaderElem = document.querySelector('.js-loader');
 
-let ALLPETS = [];
 let displayedCount = 0;
 let currentPets = [];
+let currentCategory = 'all';
 
 // FETCHES----
 
 async function getPetsCategorie() {
   try {
     const res = await axios.get('https://paw-hut.b.goit.study/api/categories');
-
-    const categories = res.data;
-
-    renderCategories(categories);
+    renderCategories(res.data);
   } catch (err) {
     iziToast.error({
       title: 'Помилка',
@@ -32,31 +29,36 @@ async function getPetsCategorie() {
   }
 }
 
-async function getPetsList() {
+async function getPetsList({ category = 'all', page = 1 } = {}) {
   try {
+    const params = {
+      page,
+      limit: 30,
+    };
+
+    if (category !== 'all') {
+      params.categoryId = category;
+    }
+
     const res = await axios.get('https://paw-hut.b.goit.study/api/animals', {
-      params: {
-        page: 1,
-        limit: 30,
-      },
+      params,
     });
 
-    ALLPETS = res.data.animals;
-    currentPets = ALLPETS;
-
-    renderPetsList(ALLPETS);
+    return res.data.animals;
   } catch (err) {
     iziToast.error({
       title: 'Помилка',
       message: err.response?.data?.message || 'Неможливо завантажити дані',
     });
+    return [];
   }
 }
 
 // RENDERS----
 function renderCategories(categories) {
   const allButton = `<li class="pets-list-categories-item">
-      <button class="category-btn active" type="button" data-name="all">Всі</button>
+      <button class="category-btn active" type="button"
+        data-category-id="all">Всі</button>
     </li>`;
   const markup = categories.map(renderCategorie).join('');
   categoriesList.innerHTML = allButton + markup;
@@ -64,14 +66,10 @@ function renderCategories(categories) {
 
 function renderCategorie(category) {
   return `<li>
-        <button class="category-btn" type="button" data-category="${category._id}" data-name="${category.name}">
+        <button class="category-btn" type="button" data-category-id="${category._id}">
           ${category.name}
         </button>
       </li>`;
-}
-
-function getRenderLimit() {
-  return window.innerWidth >= 1440 ? 9 : 8;
 }
 
 function renderPetsList(pets) {
@@ -92,11 +90,7 @@ function renderPetsList(pets) {
   petsListCards.insertAdjacentHTML('afterbegin', markup);
 
   displayedCount = petsToRender.length;
-  if (displayedCount >= pets.length) {
-    hideShowBtn();
-  } else {
-    checkShowBtn();
-  }
+  checkShowBtn();
 }
 
 function createPetCard(pet) {
@@ -116,7 +110,7 @@ function createPetCard(pet) {
 
             <ul class="petlist-pet-categories">
     ${
-      pet.categories && pet.categories.length
+      pet.categories?.length
         ? pet.categories
             .map(cat => `<li class="petlist-pet-category">${cat.name}</li>`)
             .join('')
@@ -142,7 +136,7 @@ function createPetCard(pet) {
 
 function renderMorePets(petArr) {
   const limit = getRenderLimit();
-  const nextPart = petArr.slice(displayedCount, displayedCount + limit);
+  const nextPart = currentPets.slice(displayedCount, displayedCount + limit);
 
   if (nextPart.length === 0) {
     hideShowBtn();
@@ -159,23 +153,31 @@ function renderMorePets(petArr) {
 // EVENTS----
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await Promise.all([getPetsList(), getPetsCategorie()]);
+  showLoader();
+  currentPets = await getPetsList();
+  renderPetsList(currentPets);
+  await getPetsCategorie();
   hideLoader();
 });
 
 categoriesList.addEventListener('click', async e => {
   e.preventDefault();
 
-  const button = e.target.closest('button.category-btn');
-  if (!button || !categoriesList.contains(button)) return;
+  const button = e.target.closest('.category-btn');
+  if (!button) return;
+
+  const categoryId = button.dataset.categoryId;
+  if (!categoryId) return;
+
+  if (categoryId === currentCategory) return;
 
   showLoader();
   petsListCards.innerHTML = '';
-  await new Promise(resolve => setTimeout(resolve, 300));
+  currentCategory = categoryId;
 
-  const selectedCategoryName = button.dataset.name;
-  currentPets = filterPetsByCategory(selectedCategoryName);
-
+  currentPets = await getPetsList({
+    category: categoryId === 'all' ? 'all' : categoryId,
+  });
   renderPetsList(currentPets);
 
   categoriesList
@@ -185,9 +187,7 @@ categoriesList.addEventListener('click', async e => {
   hideLoader();
 });
 
-showMoreBtn.addEventListener('click', () => {
-  renderMorePets(currentPets);
-});
+showMoreBtn.addEventListener('click', renderMorePets);
 
 petsListCards.addEventListener('click', e => {
   const btn = e.target.closest('.js-pet-more-btn');
@@ -196,17 +196,25 @@ petsListCards.addEventListener('click', e => {
   const card = btn.closest('.petlist-pet-card');
   const petId = card.dataset.id;
 
+  const pet = currentPets.find(p => p._id === petId);
+  if (!pet) return;
+
   animalDetail.animalId = petId;
   animalDetail.data = getPetById(petId);
   baseModal.openModal(animalDetail);
 });
 
 // FUNCTIONAL----
-function filterPetsByCategory(categoryName) {
-  if (categoryName === 'all') return ALLPETS;
-  return ALLPETS.filter(pet =>
-    pet.categories?.some(pet => pet && pet.name === categoryName)
-  );
+function getRenderLimit() {
+  return window.innerWidth >= 1440 ? 9 : 8;
+}
+
+function checkShowBtn() {
+  if (displayedCount < currentPets.length) {
+    showMoreBtn.classList.remove('hidden');
+  } else {
+    showMoreBtn.classList.add('hidden');
+  }
 }
 
 function hideLoader() {
@@ -217,14 +225,6 @@ function hideLoader() {
 function showLoader() {
   loaderElem.classList.remove('hidden');
   hideShowBtn();
-}
-
-function checkShowBtn() {
-  if (displayedCount < currentPets.length) {
-    showMoreBtn.classList.remove('hidden');
-  } else {
-    showMoreBtn.classList.add('hidden');
-  }
 }
 
 function hideShowBtn() {
