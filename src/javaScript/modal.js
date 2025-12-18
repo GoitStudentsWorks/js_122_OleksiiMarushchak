@@ -25,7 +25,15 @@ const baseModal = {
     });
     document.body.classList.add('modal-open');
     const focusable = this.getFocusableNodes();
-    focusable[0]?.focus();
+    let targetNode = null;
+    for (const node of focusable) {
+      if (node.tagName === 'INPUT') {
+        targetNode = node;
+        break;
+      }
+      targetNode = focusable[1];
+    }
+    targetNode?.focus();
     this.closeBtn.addEventListener('click', this.closeModal.bind(baseModal));
     this.modalNode.addEventListener('click', e => {
       e.target === this.modalNode && this.closeModal();
