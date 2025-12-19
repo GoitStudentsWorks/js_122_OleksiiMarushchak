@@ -201,6 +201,148 @@
   color: var(--white);
 }
 
+/* PAGINATION---- */
+.pagination {
+  display: none; /* приховано на мобільних */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  gap: 4px;
+  width: 368px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.pagination .tui-prev {
+  order: -1;
+}
+
+.pagination .tui-first {
+  order: 0;
+}
+
+.pagination .tui-page {
+  order: 1;
+}
+
+.pagination .tui-prev,
+.pagination .tui-next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  background: #EEE9E3;
+  border: 1px solid #C3B49D;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination .tui-prev:hover,
+.pagination .tui-next:hover {
+  border-color: #02060A;
+}
+
+.pagination .tui-first,
+.pagination .tui-last {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  width: 58px;
+  height: 48px;
+  border: 1px solid #B3B4B5;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #02060A;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pagination .tui-first:hover,
+.pagination .tui-last:hover {
+  background: var(--color-mariner-light);
+}
+
+.pagination .tui-next {
+  order: 3;
+}
+
+.pagination-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  width: 58px;
+  height: 48px;
+  border: 1px solid #B3B4B5;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #02060A;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pagination .tui-prev:hover,
+.pagination .tui-next:hover,
+.pagination-arrow:hover {
+  border-color: #02060A;
+}
+
+.pagination-page:hover {
+  background: var(--color-mariner-light);
+}
+
+.pagination-page.active {
+  background: var(--color-mariner-lighter);
+  border-color: var(--opacity-transparent);
+}
+
+.pagination .tui-prev,
+.pagination .tui-next,
+.pagination-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  background: #EEE9E3;
+  border: 1px solid #C3B49D;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination .tui-next use,
+.pagination .tui-next.tui-is-disabled use {
+  href: "/images/sprite.svg#icon-arrow-forward";
+}
+
+.pagination-arrow-icon {
+  width: 24px !important;
+  height: 24px !important;
+  fill: #02060A;
+}
+
+.tui-is-disabled,
+.pagination-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pagination-dots {
+  width: 16px;
+  height: 27px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #02060A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ADAPTATION---- */
 
 @media only screen and (min-width: 768px) {
@@ -215,6 +357,16 @@
 
   .petlist-pet-card {
     width: calc((100% - 32px) / 2);
+  }
+
+  /* Показуємо пагінацію з планшета */
+  .pagination {
+    display: flex;
+  }
+
+  /* Ховаємо кнопку "Показати більше" з планшета */
+  .showmore-btn {
+    display: none;
   }
 }
 

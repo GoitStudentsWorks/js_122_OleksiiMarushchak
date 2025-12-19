@@ -3,6 +3,8 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import baseModal from './modal';
 import animalDetail from './animalDetailsModal';
+import Pagination from 'tui-pagination';
+import 'tui-pagination/dist/tui-pagination.css';
 
 // ================= DOM =================
 
@@ -20,6 +22,11 @@ let visibleCount = 0;
 let totalItems = 0;
 
 const API_LIMIT = getRenderLimit();
+
+// ================= Pagination_STATE ================= 
+let paginationCurrentPage = 1;
+let paginationTotalPages = 0;
+let pagination = null;
 
 // ================= API =================
 
@@ -149,6 +156,7 @@ async function loadInitialPets() {
   showLoader();
 
   currentPage = 1;
+  paginationCurrentPage = 1; // Скидаємо пагінацію на першу сторінку
   visibleCount = 0;
   petsListCards.innerHTML = '';
 
@@ -159,6 +167,8 @@ async function loadInitialPets() {
 
   currentPets = data.animals;
   totalItems = data.totalItems;
+
+  initPagination(totalItems); // Pagination_ініціалізація
 
   renderNextBatch();
   hideLoader();
@@ -213,6 +223,7 @@ categoriesList.addEventListener('click', async e => {
   btn.classList.add('active');
 
   await loadInitialPets();
+  renderPagination(); // Оновлюємо пагінацію після зміни категорії
 });
 
 showMoreBtn.addEventListener('click', loadMorePets);
@@ -238,6 +249,10 @@ function getRenderLimit() {
 }
 
 function checkShowBtn() {
+  if (window.innerWidth >= 1440) {
+    showMoreBtn.classList.add('hidden');
+    return;
+  }
   showMoreBtn.classList.toggle('hidden', visibleCount >= totalItems);
 }
 
@@ -253,4 +268,100 @@ function hideLoader() {
 
 function hideShowBtn() {
   showMoreBtn.classList.add('hidden');
+}
+
+// ================= Pagination_INIT =================
+
+// ================= Pagination_RENDER =================
+
+function renderPagination() { 
+  if (!pagination) return;
+  pagination.reset(totalItems);
+}
+
+// ================= Pagination_INIT =================
+
+function initPagination(totalItemsCount) { 
+  if (window.innerWidth < 768) return; // Pagination_з планшета
+
+  paginationTotalPages = Math.ceil(totalItemsCount / API_LIMIT);
+  paginationCurrentPage = 1;
+
+  const paginationContainer = document.querySelector('.js-pagination');
+  if (!paginationContainer) return;
+
+  const options = {
+    totalItems: totalItemsCount,
+    itemsPerPage: API_LIMIT,
+    visiblePages: 3,
+    centerAlign: true,
+    template: {
+      page: '<button class="pagination-btn pagination-page">{{page}}</button>',
+      currentPage: '<button class="pagination-btn pagination-page active">{{page}}</button>',
+      
+      moveButton: '<button class="pagination-btn pagination-arrow tui-{{type}}"><svg class="pagination-arrow-icon" width="24" height="24" viewBox="0 0 24 24"><use href="/images/sprite.svg#icon-arrow-back"></use></svg></button>',
+      disabledMoveButton: '<button class="pagination-btn pagination-arrow tui-is-disabled tui-{{type}}"><svg class="pagination-arrow-icon" width="24" height="24" viewBox="0 0 24 24"><use href="/images/sprite.svg#icon-arrow-back"></use></svg></button>',
+      
+      firstPage: '<button class="pagination-btn pagination-page">1</button>',
+      lastPage: '<button class="pagination-btn pagination-page">{{totalPages}}</button>',
+    },
+  };
+
+  pagination = new Pagination(paginationContainer, options);
+
+  // Оновлюємо firstBtn і lastBtn одразу після ініціалізації
+  setTimeout(() => {
+    const firstBtn = document.querySelector('.pagination .tui-first');
+    const lastBtn = document.querySelector('.pagination .tui-last');
+    const nextBtns = document.querySelectorAll('.pagination .tui-next use');
+    
+    if (firstBtn) {
+      firstBtn.style.display = 'none'; // Ховаємо при ініціалізації
+    }
+    if (lastBtn) {
+      lastBtn.textContent = paginationTotalPages;
+    }
+    // Змінюємо іконки next кнопок на forward
+    nextBtns.forEach(use => {
+      use.setAttribute('href', '/images/sprite.svg#icon-arrow-forward');
+    });
+  }, 0);
+
+  pagination.on('afterMove', async (event) => {
+    const currentPage = event.page;
+    const totalPages = Math.ceil(totalItems / API_LIMIT);
+
+    // Ховаємо first на 1-2 сторінках, last на останніх двох
+    const firstBtn = document.querySelector('.pagination .tui-first');
+    const lastBtn = document.querySelector('.pagination .tui-last');
+    
+    if (firstBtn) {
+      firstBtn.style.display = currentPage <= 2 ? 'none' : 'flex';
+      firstBtn.textContent = '1';
+    }
+    
+    if (lastBtn) {
+      lastBtn.style.display = currentPage >= totalPages - 1 ? 'none' : 'flex';
+      lastBtn.textContent = totalPages;
+    }
+
+    // Оновлюємо іконки next кнопок
+    const nextBtns = document.querySelectorAll('.pagination .tui-next use');
+    nextBtns.forEach(use => {
+      use.setAttribute('href', '/images/sprite.svg#icon-arrow-forward');
+    });
+
+    showLoader();
+    const data = await getPetsList({
+      category: currentCategory,
+      page: currentPage,
+    });
+
+    currentPets = data.animals;
+    totalItems = data.totalItems;
+    visibleCount = 0;
+    petsListCards.innerHTML = '';
+    renderNextBatch();
+    hideLoader();
+  });
 }
