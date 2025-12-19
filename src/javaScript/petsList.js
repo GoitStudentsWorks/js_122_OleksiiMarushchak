@@ -321,7 +321,7 @@ function initPagination(totalItemsCount) {
     }
     // Змінюємо іконки next кнопок на forward
     nextBtns.forEach(use => {
-      use.setAttribute('href', '/images/sprite.svg#icon-arrow-forward');
+      use.setAttribute('href', './sprite.svg#icon-arrow-forward');
     });
   }, 0);
 
@@ -346,7 +346,7 @@ function initPagination(totalItemsCount) {
     // Оновлюємо іконки next кнопок
     const nextBtns = document.querySelectorAll('.pagination .tui-next use');
     nextBtns.forEach(use => {
-      use.setAttribute('href', '/images/sprite.svg#icon-arrow-forward');
+      use.setAttribute('href', './sprite.svg#icon-arrow-forward');
     });
 
     showLoader();
