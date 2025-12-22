@@ -64,7 +64,7 @@
     transition: opacity 0.3s;
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1439px) {
     .burger-btn {
         display: block;
     }
