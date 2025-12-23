@@ -5,6 +5,7 @@
   flex-direction: column;
   font-size: var(--text-regular-mobile);
   line-height: 150%;
+  position: relative;
 }
 
 .order-title {
@@ -53,6 +54,20 @@ textarea.input-error {
 }
 .validation.error {
   color: var(--red);
+}
+
+.modal-loader-wrapper {
+  position: absolute;
+  background-color: var(--modal-loader-bgc);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
 }
 
 @media (min-width: 375px) {

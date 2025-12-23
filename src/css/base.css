@@ -25,6 +25,7 @@
   --neutral-darkest-5: rgba(2, 6, 10, 0.05);
   --red: #ae0000;
   --modal-bgc: rgba(0, 0, 0, 0.25);
+  --modal-loader-bgc: rgba(255, 255, 255, 0.6);
   /*Text sizes*/
   --heading-1-mobile: 40px;
   --heading-1-desktop: 56px;

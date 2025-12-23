@@ -20,7 +20,9 @@ const orderForm = {
                 <textarea type="textarea" name="comment" id="comment" placeholder="Напишіть ваш коментар"></textarea>
                  <span class="validation js-comment-validation">Максимальна довжина ${this.validation.lengthLimits.comment} символів</span></div>
                <div class='order-controllers-container'> <button type="submit" class="dark">Надіслати</button></div>
-            </form>`;
+          <div class='modal-loader-wrapper  js-loader-wrapper hidden'><span class="loader"></span></div>  
+               </form>
+               `;
   },
   getFormEle() {
     return document.querySelector('.js-order-form');
@@ -59,7 +61,9 @@ const orderForm = {
         }
         return;
       }
+      loader.showLoader();
       const data = await postOrder(params);
+      loader.hideLoader();
       e.target.reset();
       baseModal.closeModal();
       notification.openSuccessAlert(
@@ -246,3 +250,15 @@ const orderForm = {
   },
 };
 export default orderForm;
+
+const loader = {
+  getLoaderEle() {
+    return document.querySelector('.js-loader-wrapper');
+  },
+  showLoader() {
+    this.getLoaderEle().classList.remove('hidden');
+  },
+  hideLoader() {
+    this.getLoaderEle().classList.add('hidden');
+  },
+};
