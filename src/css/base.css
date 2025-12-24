@@ -158,14 +158,6 @@ button:disabled {
   opacity: 0.3;
 }
 
-a {
-  color: var(--neutral-darkest);
-}
-
-a:hover,
-a:focus {
-  text-decoration: underline;
-}
 a:active {
   color: var(--mariner-dark);
 }

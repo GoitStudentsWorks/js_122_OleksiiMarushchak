@@ -81,4 +81,24 @@
     pointer-events: all;
     transition: visibility 1s ease, opacity 1s ease;
   }
+  a.footer-nav-link {
+    color: var(--neutral-darkest);
+    position: relative;
+  }
+  a.footer-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0; /* Позиция подчеркивания */
+    left: 50%;
+    width: 0;
+    height: 2px; /* Толщина подчеркивания */
+    background-color: var(--neutral-darkest); /* Цвет подчеркивания */
+    transition: all 0.3s ease;
+  }
+
+  a.footer-nav-link:hover::after,
+  a.nfooter-nav-link:focus::after {
+    width: 100%;
+    left: 0;
+  }
 }
