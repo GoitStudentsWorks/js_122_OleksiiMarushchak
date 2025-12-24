@@ -98,7 +98,7 @@
   }
 
   a.footer-nav-link:hover::after,
-  a.nfooter-nav-link:focus::after {
+  a.footer-nav-link:focus::after {
     width: 100%;
     left: 0;
   }
