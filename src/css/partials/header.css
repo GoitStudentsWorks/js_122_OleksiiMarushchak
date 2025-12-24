@@ -19,7 +19,7 @@
 }
 .nav-item {
   font-weight: 400;
-  color: #02060a;
+  color: var(--neutral-darkest);
   line-height: 1.5;
   font-size: 16px;
 }
@@ -55,8 +55,8 @@ a.nav-header-link:focus::after {
 .cta-btn-modal {
   border-radius: 8px;
   padding: 8px 20px;
-  background: #88765c;
-  color: #fff;
+  background: var(--mariner-dark);
+  color: var(--white);
   font-size: 16px;
   scroll-behavior: smooth;
   transition: background-color 0.3s;
@@ -72,7 +72,8 @@ a.nav-header-link:focus::after {
 
 .cta-btn-header:hover,
 .cta-btn-header:focus {
-  background: #6b5a47;
+  background-color: var(--mariner-lighter);
+  color: var(--neutral-darkest);
 }
 
 .burger-btn {
@@ -96,7 +97,7 @@ a.nav-header-link:focus::after {
   position: absolute;
   width: 100%;
   height: 100vh;
-  background-color: #f6f4f1;
+  background-color: var(--mariner-lightest);
   z-index: 1000;
 }
 
@@ -137,7 +138,7 @@ a.nav-header-link:focus::after {
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
-  color: #02060a;
+  color: var(--neutral-darkest);
 }
 
 .cta-btn-modal {

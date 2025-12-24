@@ -157,7 +157,9 @@ button:disabled {
 .isSpiritButton:disabled {
   opacity: 0.3;
 }
-
+a {
+  color: var(--neutral-darkest);
+}
 a:active {
   color: var(--mariner-dark);
 }
