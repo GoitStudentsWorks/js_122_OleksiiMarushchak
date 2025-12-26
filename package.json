@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/project-pets-are-friend/",
+    "build": "vite build --base=/js_122_OleksiiMarushchak/",
     "preview": "vite preview"
   },
   "devDependencies": {
